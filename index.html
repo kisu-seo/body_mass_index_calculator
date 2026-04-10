@@ -1,85 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Body Mass Index Calculator</title>
+  <title>Body Mass Index Calculator</title>
+
+  <!-- 구글 폰트: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- number input 화살표(스피너) 제거 — 별도 CSS 파일 없이 인라인 스타일로 처리 -->
+  <style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] { -moz-appearance: textfield; }
+  </style>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 커스텀 디자인 설정 (색상, 폰트 크기, 간격) -->
+  <script src="./tailwind.config.js"></script>
 </head>
-<body>
 
-  Body Mass Index Calculator
+<body class="font-sans bg-white">
 
-  Better understand your weight in relation to your height using our 
-  body mass index (BM) calculator. While BMI is not the sole determinant 
-  of a healthy weight, it offers a valuable starting point to evaluate 
-  your overall health and well-being.
+  <!-- ============================================================
+       상단 영역: 그라디언트 배경 + 헤더 + BMI 계산기 카드
+  ============================================================ -->
+  <div class="relative">
 
-  Enter your details below
+    <!-- 그라디언트 배경 블록 (아래쪽이 둥글게 처리됨) -->
+    <div
+      class="absolute inset-x-0 top-0 h-[600px] bg-gradient-1 rounded-b-[2.5rem] -z-10"
+      aria-hidden="true"
+    ></div>
 
-  Metric
-  Imperial
+    <main>
 
-  Height
-  Weight
+      <!-- ── 헤더 섹션 ── -->
+      <header class="flex flex-col items-center px-300 pt-300 pb-0">
+        <img
+          src="./assets/images/logo.svg"
+          alt="BMI Calculator 로고"
+          class="w-10 h-10 mb-600 self-start"
+        >
+        <h1 class="text-preset-3 text-blue-900 text-center mb-300 leading-tight">
+          Body Mass Index<br>Calculator
+        </h1>
+        <p class="text-preset-6-regular text-grey-500 text-center">
+          Better understand your weight in relation to your height using our
+          body mass index (BMI) calculator. While BMI is not the sole determinant
+          of a healthy weight, it offers a valuable starting point to evaluate
+          your overall health and well-being.
+        </p>
+      </header>
 
-  Your BMI is...
+      <!-- ── BMI 계산기 카드 ── -->
+      <section
+        class="mx-300 my-900 bg-white rounded-3xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300"
+        aria-labelledby="form-title"
+      >
+        <h2 id="form-title" class="text-preset-5 text-blue-900 mb-300">
+          Enter your details below
+        </h2>
 
-  <!-- add score -->
+        <form id="bmi-form" novalidate>
 
-  Your BMI suggests you're <!-- add classification -->. 
-  Your ideal weight is between <!-- add range -->.
+          <!-- 단위 선택 라디오 버튼 그룹 -->
+          <fieldset class="border-none p-0 m-0 mb-300">
+            <legend class="sr-only">측정 단위 선택 (Metric 또는 Imperial)</legend>
 
-  What your BMI result means
+            <div class="grid grid-cols-2 gap-200">
 
-  A BMI range of 18.5 to 24.9 is considered a 'healthy weight.' Maintaining a 
-  healthy weight may lower your chances of experiencing health issues later on, 
-  such as obesity and type 2 diabetes. Aim for a nutritious diet with reduced 
-  fat and sugar content, incorporating ample fruits and vegetables. Additionally, 
-  strive for regular physical activity, ideally about 30 minutes daily for 
-  five days a week.
+              <!-- Metric 라디오 -->
+              <label class="flex items-center gap-200 cursor-pointer">
+                <input
+                  type="radio"
+                  name="unit"
+                  id="metric"
+                  value="metric"
+                  checked
+                  class="peer sr-only"
+                >
+                <!-- 커스텀 라디오 원 — CSS peer로 테두리·배경 변경, JS로 내부 점 제어 -->
+                <span
+                  class="w-[31px] h-[31px] flex-shrink-0 rounded-full border-2 border-grey-300
+                         flex items-center justify-center
+                         peer-checked:border-blue-500 peer-checked:bg-blue-100 transition-all"
+                  aria-hidden="true"
+                >
+                  <span
+                    id="metric-dot"
+                    class="w-[15px] h-[15px] rounded-full bg-blue-500 transition-transform"
+                  ></span>
+                </span>
+                <span class="text-preset-6-semibold text-blue-900">Metric</span>
+              </label>
 
-  Healthy eating
-  Healthy eating promotes weight control, disease prevention, better digestion, 
-  immunity, mental clarity, and mood.
+              <!-- Imperial 라디오 -->
+              <label class="flex items-center gap-200 cursor-pointer">
+                <input
+                  type="radio"
+                  name="unit"
+                  id="imperial"
+                  value="imperial"
+                  class="peer sr-only"
+                >
+                <span
+                  class="w-[31px] h-[31px] flex-shrink-0 rounded-full border-2 border-grey-300
+                         flex items-center justify-center
+                         peer-checked:border-blue-500 peer-checked:bg-blue-100 transition-all"
+                  aria-hidden="true"
+                >
+                  <span
+                    id="imperial-dot"
+                    class="w-[15px] h-[15px] rounded-full bg-blue-500 scale-0 transition-transform"
+                  ></span>
+                </span>
+                <span class="text-preset-6-semibold text-blue-900">Imperial</span>
+              </label>
 
-  Regular exercise
-  Exercise improves fitness, aids weight control, elevates mood, and reduces disease 
-  risk, fostering wellness and longevity.
+            </div>
+          </fieldset>
 
-  Adequate sleep
-  Sleep enhances mental clarity, emotional stability, and physical wellness, promoting 
-  overall restoration and rejuvenation.
+          <!-- ── Metric 입력 필드 (기본 표시) ── -->
+          <div id="metric-fields" class="grid grid-cols-2 gap-200 mb-300">
 
-  Limitations of BMI
+            <!-- 키 (cm) -->
+            <div class="flex flex-col gap-100">
+              <label for="height-cm" class="text-preset-7-bold text-grey-500">Height</label>
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="height-cm"
+                  name="height-cm"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="키 입력 (센티미터 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">cm</span>
+              </div>
+            </div>
 
-  Although BMI is often a practical indicator of healthy weight, it is not suited for 
-  every person. Specific groups should carefully consider their BMI outcomes, and in 
-  certain cases, the measurement may not be beneficial to use.
+            <!-- 몸무게 (kg) -->
+            <div class="flex flex-col gap-100">
+              <label for="weight-kg" class="text-preset-7-bold text-grey-500">Weight</label>
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="weight-kg"
+                  name="weight-kg"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="몸무게 입력 (킬로그램 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">kg</span>
+              </div>
+            </div>
 
-  Gender
-  The development and body fat composition of girls and boys vary with age. Consequently, 
-  a child's age and gender are considered when evaluating their BMI.
+          </div>
 
-  Age
-  In aging individuals, increased body fat and muscle loss may cause BMI to underestimate 
-  body fat content.
+          <!-- ── Imperial 입력 필드 (초기 숨김) ── -->
+          <div id="imperial-fields" class="hidden mb-300">
 
-  Muscle
-  BMI may misclassify muscular individuals as overweight or obese, as it doesn't 
-  differentiate muscle from fat.
+            <!-- 키: ft + in -->
+            <p class="text-preset-7-bold text-grey-500 mb-100">Height</p>
+            <div class="grid grid-cols-2 gap-200 mb-200">
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="height-ft"
+                  name="height-ft"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="키 입력 (피트 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">ft</span>
+              </div>
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="height-in"
+                  name="height-in"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="키 입력 (인치 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">in</span>
+              </div>
+            </div>
 
-  Pregnancy
-  Expectant mothers experience weight gain due to their growing baby. Maintaining a 
-  healthy pre-pregnancy BMI is advisable to minimise health risks for both mother 
-  and child.
+            <!-- 몸무게: st + lbs -->
+            <p class="text-preset-7-bold text-grey-500 mb-100">Weight</p>
+            <div class="grid grid-cols-2 gap-200">
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="weight-st"
+                  name="weight-st"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="몸무게 입력 (스톤 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">st</span>
+              </div>
+              <div class="flex items-center border border-grey-300 rounded-xl
+                          hover:border-blue-500
+                          focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+                          transition-all">
+                <input
+                  type="number"
+                  id="weight-lbs"
+                  name="weight-lbs"
+                  placeholder="0"
+                  min="0"
+                  inputmode="decimal"
+                  aria-label="몸무게 입력 (파운드 단위)"
+                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
+                >
+                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">lbs</span>
+              </div>
+            </div>
 
-  Race
-  Certain health concerns may affect individuals of some Black and Asian origins at 
-  lower BMIs than others. To learn more, it is advised to discuss this with your 
-  GP or practice nurse.
+          </div>
+
+          <!-- ── 결과 박스 (파란색) ── -->
+          <div
+            class="bg-blue-500 rounded-2xl p-300 text-white"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+
+            <!-- Welcome 화면: 기본 상태 (값 입력 전) -->
+            <div id="welcome-state">
+              <h3 class="text-preset-5 mb-200">Welcome!</h3>
+              <p class="text-preset-7-regular">
+                Enter your height and weight and you'll see your BMI result here.
+              </p>
+            </div>
+
+            <!-- 결과 화면: 값 입력 후 표시 (초기 숨김) -->
+            <div id="result-state" class="hidden">
+              <p class="text-preset-6-semibold mb-100">Your BMI is...</p>
+              <p id="bmi-score" class="text-preset-3 mb-300">--</p>
+              <p id="bmi-description" class="text-preset-7-regular">
+                Your BMI suggests you're
+                <strong id="bmi-classification"></strong>.
+                Your ideal weight is between
+                <strong id="bmi-range"></strong>.
+              </p>
+            </div>
+
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       BMI 결과 의미 섹션
+  ============================================================ -->
+  <section aria-labelledby="bmi-meaning-title" class="mb-1100">
+    <img
+      src="./assets/images/image-man-eating.webp"
+      alt="건강하게 과일을 먹고 있는 남성"
+      class="w-full object-cover mb-900"
+    >
+    <div class="px-300">
+      <h2 id="bmi-meaning-title" class="text-preset-3 text-blue-900 mb-300">
+        What your BMI result means
+      </h2>
+      <p class="text-preset-6-regular text-grey-500">
+        A BMI range of 18.5 to 24.9 is considered a 'healthy weight.' Maintaining a
+        healthy weight may lower your chances of experiencing health issues later on,
+        such as obesity and type 2 diabetes. Aim for a nutritious diet with reduced
+        fat and sugar content, incorporating ample fruits and vegetables. Additionally,
+        strive for regular physical activity, ideally about 30 minutes daily for
+        five days a week.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       건강 생활 팁 카드 3개 (그라디언트 배경)
+  ============================================================ -->
+  <section
+    aria-label="건강한 생활 습관 안내"
+    class="bg-gradient-1 px-300 py-900 flex flex-col gap-900 mb-1100"
+  >
+
+    <!-- 건강한 식사 -->
+    <article class="flex flex-col gap-300">
+      <img src="./assets/images/icon-eating.svg" alt="" aria-hidden="true" class="w-16 h-16">
+      <div>
+        <h3 class="text-preset-4 text-blue-900 mb-200">Healthy eating</h3>
+        <p class="text-preset-6-regular text-grey-500">
+          Healthy eating promotes weight control, disease prevention, better digestion,
+          immunity, mental clarity, and mood.
+        </p>
+      </div>
+    </article>
+
+    <!-- 규칙적인 운동 -->
+    <article class="flex flex-col gap-300">
+      <img src="./assets/images/icon-exercise.svg" alt="" aria-hidden="true" class="w-16 h-16">
+      <div>
+        <h3 class="text-preset-4 text-blue-900 mb-200">Regular exercise</h3>
+        <p class="text-preset-6-regular text-grey-500">
+          Exercise improves fitness, aids weight control, elevates mood, and reduces
+          disease risk, fostering wellness and longevity.
+        </p>
+      </div>
+    </article>
+
+    <!-- 충분한 수면 -->
+    <article class="flex flex-col gap-300">
+      <img src="./assets/images/icon-sleep.svg" alt="" aria-hidden="true" class="w-16 h-16">
+      <div>
+        <h3 class="text-preset-4 text-blue-900 mb-200">Adequate sleep</h3>
+        <p class="text-preset-6-regular text-grey-500">
+          Sleep enhances mental clarity, emotional stability, and physical wellness,
+          promoting overall restoration and rejuvenation.
+        </p>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============================================================
+       BMI 한계 섹션
+  ============================================================ -->
+  <section aria-labelledby="limitations-title" class="px-300 pb-1600">
+
+    <h2 id="limitations-title" class="text-preset-3 text-blue-900 text-center mb-300">
+      Limitations of BMI
+    </h2>
+    <p class="text-preset-6-regular text-grey-500 text-center mb-600">
+      Although BMI is often a practical indicator of healthy weight, it is not suited for
+      every person. Specific groups should carefully consider their BMI outcomes, and in
+      certain cases, the measurement may not be beneficial to use.
+    </p>
+
+    <div class="flex flex-col gap-200">
+
+      <!-- 성별 -->
+      <article class="bg-white rounded-2xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300">
+        <div class="flex items-center gap-200 mb-200">
+          <img src="./assets/images/icon-gender.svg" alt="" aria-hidden="true" class="w-8 h-8">
+          <h3 class="text-preset-5 text-blue-900">Gender</h3>
+        </div>
+        <p class="text-preset-6-regular text-grey-500">
+          The development and body fat composition of girls and boys vary with age.
+          Consequently, a child's age and gender are considered when evaluating their BMI.
+        </p>
+      </article>
+
+      <!-- 나이 -->
+      <article class="bg-white rounded-2xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300">
+        <div class="flex items-center gap-200 mb-200">
+          <img src="./assets/images/icon-age.svg" alt="" aria-hidden="true" class="w-8 h-8">
+          <h3 class="text-preset-5 text-blue-900">Age</h3>
+        </div>
+        <p class="text-preset-6-regular text-grey-500">
+          In aging individuals, increased body fat and muscle loss may cause BMI to
+          underestimate body fat content.
+        </p>
+      </article>
+
+      <!-- 근육 -->
+      <article class="bg-white rounded-2xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300">
+        <div class="flex items-center gap-200 mb-200">
+          <img src="./assets/images/icon-muscle.svg" alt="" aria-hidden="true" class="w-8 h-8">
+          <h3 class="text-preset-5 text-blue-900">Muscle</h3>
+        </div>
+        <p class="text-preset-6-regular text-grey-500">
+          BMI may misclassify muscular individuals as overweight or obese, as it doesn't
+          differentiate muscle from fat.
+        </p>
+      </article>
+
+      <!-- 임신 -->
+      <article class="bg-white rounded-2xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300">
+        <div class="flex items-center gap-200 mb-200">
+          <img src="./assets/images/icon-pregnancy.svg" alt="" aria-hidden="true" class="w-8 h-8">
+          <h3 class="text-preset-5 text-blue-900">Pregnancy</h3>
+        </div>
+        <p class="text-preset-6-regular text-grey-500">
+          Expectant mothers experience weight gain due to their growing baby. Maintaining
+          a healthy pre-pregnancy BMI is advisable to minimise health risks for both
+          mother and child.
+        </p>
+      </article>
+
+      <!-- 인종 -->
+      <article class="bg-white rounded-2xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300">
+        <div class="flex items-center gap-200 mb-200">
+          <img src="./assets/images/icon-race.svg" alt="" aria-hidden="true" class="w-8 h-8">
+          <h3 class="text-preset-5 text-blue-900">Race</h3>
+        </div>
+        <p class="text-preset-6-regular text-grey-500">
+          Certain health concerns may affect individuals of some Black and Asian origins at
+          lower BMIs than others. To learn more, it is advised to discuss this with your
+          GP or practice nurse.
+        </p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- JavaScript 외부 파일 연결 -->
+  <!-- defer: HTML을 모두 읽은 뒤에 JS를 실행해서 DOM 요소를 안전하게 찾을 수 있어요 -->
+  <script src="./app.js" defer></script>
 
 </body>
 </html>
