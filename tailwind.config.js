@@ -14,7 +14,7 @@ tailwind.config = {
         },
       },
       backgroundImage: {
-        'gradient-1': 'linear-gradient(to right, #D6FCFE, #D6E6FE)',
+        'gradient-1': 'linear-gradient(to right, #D6FCFE 0%, #D6E6FE 100%)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'], // 기본 글씨체를 Inter로 설정해요!
