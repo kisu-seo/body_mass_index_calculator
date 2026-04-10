@@ -19,7 +19,10 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    input[type="number"] { -moz-appearance: textfield; }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
   </style>
 
   <!-- Tailwind CSS CDN -->
@@ -36,21 +39,14 @@
   <div class="relative">
 
     <!-- 그라디언트 배경 블록 (아래쪽이 둥글게 처리됨) -->
-    <div
-      class="absolute inset-x-0 top-0 h-[600px] bg-gradient-1 rounded-b-[2.5rem] -z-10"
-      aria-hidden="true"
-    ></div>
+    <div class="absolute inset-x-0 top-0 h-[660px] bg-gradient-1 rounded-b-[2.5rem] -z-10" aria-hidden="true"></div>
 
     <main>
 
       <!-- ── 헤더 섹션 ── -->
-      <header class="flex flex-col items-center px-300 pt-300 pb-0">
-        <img
-          src="./assets/images/logo.svg"
-          alt="BMI Calculator 로고"
-          class="w-10 h-10 mb-600 self-start"
-        >
-        <h1 class="text-preset-3 text-blue-900 text-center mb-300 leading-tight">
+      <header class="flex flex-col items-center px-300 pt-400 pb-0">
+        <img src="./assets/images/logo.svg" alt="BMI Calculator 로고" class="w-10 h-10 mb-400">
+        <h1 class="text-preset-2 text-blue-900 text-center mb-300 leading-tight">
           Body Mass Index<br>Calculator
         </h1>
         <p class="text-preset-6-regular text-grey-500 text-center">
@@ -62,11 +58,9 @@
       </header>
 
       <!-- ── BMI 계산기 카드 ── -->
-      <section
-        class="mx-300 my-900 bg-white rounded-3xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300"
-        aria-labelledby="form-title"
-      >
-        <h2 id="form-title" class="text-preset-5 text-blue-900 mb-300">
+      <section class="mt-400 mx-300 mb-[61px] bg-white rounded-3xl shadow-[0_2rem_4rem_rgba(143,174,207,0.25)] p-300"
+        aria-labelledby="form-title">
+        <h2 id="form-title" class="text-preset-4 text-blue-900 mb-300">
           Enter your details below
         </h2>
 
@@ -76,52 +70,28 @@
           <fieldset class="border-none p-0 m-0 mb-300">
             <legend class="sr-only">측정 단위 선택 (Metric 또는 Imperial)</legend>
 
-            <div class="grid grid-cols-2 gap-200">
+            <div class="grid grid-cols-2 gap-300">
 
               <!-- Metric 라디오 -->
               <label class="flex items-center gap-200 cursor-pointer">
-                <input
-                  type="radio"
-                  name="unit"
-                  id="metric"
-                  value="metric"
-                  checked
-                  class="peer sr-only"
-                >
+                <input type="radio" name="unit" id="metric" value="metric" checked class="peer sr-only">
                 <!-- 커스텀 라디오 원 — CSS peer로 테두리·배경 변경, JS로 내부 점 제어 -->
-                <span
-                  class="w-[31px] h-[31px] flex-shrink-0 rounded-full border-2 border-grey-300
+                <span class="w-[31px] h-[31px] flex-shrink-0 rounded-full border border-grey-500
                          flex items-center justify-center
-                         peer-checked:border-blue-500 peer-checked:bg-blue-100 transition-all"
-                  aria-hidden="true"
-                >
-                  <span
-                    id="metric-dot"
-                    class="w-[15px] h-[15px] rounded-full bg-blue-500 transition-transform"
-                  ></span>
+                         peer-checked:border-0 peer-checked:bg-blue-100 transition-all" aria-hidden="true">
+                  <span id="metric-dot" class="w-[15px] h-[15px] rounded-full bg-blue-500 transition-transform"></span>
                 </span>
                 <span class="text-preset-6-semibold text-blue-900">Metric</span>
               </label>
 
               <!-- Imperial 라디오 -->
               <label class="flex items-center gap-200 cursor-pointer">
-                <input
-                  type="radio"
-                  name="unit"
-                  id="imperial"
-                  value="imperial"
-                  class="peer sr-only"
-                >
-                <span
-                  class="w-[31px] h-[31px] flex-shrink-0 rounded-full border-2 border-grey-300
+                <input type="radio" name="unit" id="imperial" value="imperial" class="peer sr-only">
+                <span class="w-[31px] h-[31px] flex-shrink-0 rounded-full border border-grey-500
                          flex items-center justify-center
-                         peer-checked:border-blue-500 peer-checked:bg-blue-100 transition-all"
-                  aria-hidden="true"
-                >
-                  <span
-                    id="imperial-dot"
-                    class="w-[15px] h-[15px] rounded-full bg-blue-500 scale-0 transition-transform"
-                  ></span>
+                         peer-checked:border-0 peer-checked:bg-blue-100 transition-all" aria-hidden="true">
+                  <span id="imperial-dot"
+                    class="w-[15px] h-[15px] rounded-full bg-blue-500 scale-0 transition-transform"></span>
                 </span>
                 <span class="text-preset-6-semibold text-blue-900">Imperial</span>
               </label>
@@ -130,47 +100,33 @@
           </fieldset>
 
           <!-- ── Metric 입력 필드 (기본 표시) ── -->
-          <div id="metric-fields" class="grid grid-cols-2 gap-200 mb-300">
+          <div id="metric-fields" class="flex flex-col gap-300 mb-300">
 
             <!-- 키 (cm) -->
             <div class="flex flex-col gap-100">
-              <label for="height-cm" class="text-preset-7-bold text-grey-500">Height</label>
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <label for="height-cm" class="text-preset-7-regular text-grey-500">Height</label>
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="height-cm"
-                  name="height-cm"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="height-cm" name="height-cm" placeholder="0" min="0" inputmode="decimal"
                   aria-label="키 입력 (센티미터 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">cm</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">cm</span>
               </div>
             </div>
 
             <!-- 몸무게 (kg) -->
             <div class="flex flex-col gap-100">
-              <label for="weight-kg" class="text-preset-7-bold text-grey-500">Weight</label>
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <label for="weight-kg" class="text-preset-7-regular text-grey-500">Weight</label>
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="weight-kg"
-                  name="weight-kg"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="weight-kg" name="weight-kg" placeholder="0" min="0" inputmode="decimal"
                   aria-label="몸무게 입력 (킬로그램 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">kg</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">kg</span>
               </div>
             </div>
 
@@ -182,89 +138,57 @@
             <!-- 키: ft + in -->
             <p class="text-preset-7-bold text-grey-500 mb-100">Height</p>
             <div class="grid grid-cols-2 gap-200 mb-200">
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="height-ft"
-                  name="height-ft"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="height-ft" name="height-ft" placeholder="0" min="0" inputmode="decimal"
                   aria-label="키 입력 (피트 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">ft</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">ft</span>
               </div>
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="height-in"
-                  name="height-in"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="height-in" name="height-in" placeholder="0" min="0" inputmode="decimal"
                   aria-label="키 입력 (인치 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">in</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">in</span>
               </div>
             </div>
 
             <!-- 몸무게: st + lbs -->
             <p class="text-preset-7-bold text-grey-500 mb-100">Weight</p>
             <div class="grid grid-cols-2 gap-200">
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="weight-st"
-                  name="weight-st"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="weight-st" name="weight-st" placeholder="0" min="0" inputmode="decimal"
                   aria-label="몸무게 입력 (스톤 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">st</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">st</span>
               </div>
-              <div class="flex items-center border border-grey-300 rounded-xl
+              <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
                           focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
                           transition-all">
-                <input
-                  type="number"
-                  id="weight-lbs"
-                  name="weight-lbs"
-                  placeholder="0"
-                  min="0"
-                  inputmode="decimal"
+                <input type="number" id="weight-lbs" name="weight-lbs" placeholder="0" min="0" inputmode="decimal"
                   aria-label="몸무게 입력 (파운드 단위)"
-                  class="w-full min-w-0 px-300 py-200 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl"
-                >
-                <span class="pr-300 text-preset-5 text-blue-500 font-semibold select-none" aria-hidden="true">lbs</span>
+                  class="w-full min-w-0 p-300 text-preset-5 text-blue-900 bg-transparent outline-none rounded-xl placeholder:text-preset-4 placeholder:text-grey-500">
+                <span class="pr-300 text-preset-4 text-blue-500 font-semibold select-none" aria-hidden="true">lbs</span>
               </div>
             </div>
 
           </div>
 
           <!-- ── 결과 박스 (파란색) ── -->
-          <div
-            class="bg-blue-500 rounded-2xl p-300 text-white"
-            aria-live="polite"
-            aria-atomic="true"
-          >
+          <div class="bg-blue-500 rounded-2xl p-400 text-white" aria-live="polite" aria-atomic="true">
 
             <!-- Welcome 화면: 기본 상태 (값 입력 전) -->
             <div id="welcome-state">
-              <h3 class="text-preset-5 mb-200">Welcome!</h3>
+              <h3 class="text-preset-4 mb-300">Welcome!</h3>
               <p class="text-preset-7-regular">
                 Enter your height and weight and you'll see your BMI result here.
               </p>
@@ -292,11 +216,7 @@
        BMI 결과 의미 섹션
   ============================================================ -->
   <section aria-labelledby="bmi-meaning-title" class="mb-1100">
-    <img
-      src="./assets/images/image-man-eating.webp"
-      alt="건강하게 과일을 먹고 있는 남성"
-      class="w-full object-cover mb-900"
-    >
+    <img src="./assets/images/image-man-eating.webp" alt="건강하게 과일을 먹고 있는 남성" class="w-full object-cover mb-900">
     <div class="px-300">
       <h2 id="bmi-meaning-title" class="text-preset-3 text-blue-900 mb-300">
         What your BMI result means
@@ -315,10 +235,7 @@
   <!-- ============================================================
        건강 생활 팁 카드 3개 (그라디언트 배경)
   ============================================================ -->
-  <section
-    aria-label="건강한 생활 습관 안내"
-    class="bg-gradient-1 px-300 py-900 flex flex-col gap-900 mb-1100"
-  >
+  <section aria-label="건강한 생활 습관 안내" class="bg-gradient-1 px-300 py-900 flex flex-col gap-900 mb-1100">
 
     <!-- 건강한 식사 -->
     <article class="flex flex-col gap-300">
@@ -444,4 +361,5 @@
   <script src="./app.js" defer></script>
 
 </body>
+
 </html>
