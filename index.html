@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
   <title>Body Mass Index Calculator</title>
 
   <!-- 구글 폰트: Inter -->
@@ -44,10 +44,10 @@
     <main>
 
       <!-- ── 헤더 섹션 ── -->
-      <header class="flex flex-col items-center px-300 pt-400 pb-0">
-        <img src="./assets/images/logo.svg" alt="BMI Calculator 로고" class="w-10 h-10 mb-400">
+      <header class="flex flex-col items-center px-300 md:px-[41px] pt-400 pb-0">
+        <img src="./assets/images/logo.svg" alt="BMI Calculator 로고" class="w-10 h-10 mb-400 md:mb-500">
         <h1 class="text-preset-2 text-blue-900 text-center mb-300 leading-tight">
-          Body Mass Index<br>Calculator
+          Body Mass<br class="hidden md:block"> Index<br class="md:hidden"> Calculator
         </h1>
         <p class="text-preset-6-regular text-grey-500 text-center">
           Better understand your weight in relation to your height using our
@@ -58,16 +58,17 @@
       </header>
 
       <!-- ── BMI 계산기 카드 ── -->
-      <section class="mt-400 mx-300 mb-[61px] bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300"
+      <section
+        class="mt-400 mx-300 mb-[61px] md:mt-500 md:mx-[41px] md:mb-[107px] bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400"
         aria-labelledby="form-title">
-        <h2 id="form-title" class="text-preset-4 text-blue-900 mb-300">
+        <h2 id="form-title" class="text-preset-4 text-blue-900 mb-300 md:mb-400">
           Enter your details below
         </h2>
 
         <form id="bmi-form" novalidate>
 
           <!-- 단위 선택 라디오 버튼 그룹 -->
-          <fieldset class="border-none p-0 m-0 mb-300">
+          <fieldset class="border-none p-0 m-0 mb-300 md:mb-400">
             <legend class="sr-only">측정 단위 선택 (Metric 또는 Imperial)</legend>
 
             <div class="grid grid-cols-2 gap-300">
@@ -100,10 +101,10 @@
           </fieldset>
 
           <!-- ── Metric 입력 필드 (기본 표시) ── -->
-          <div id="metric-fields" class="flex flex-col gap-300 mb-300">
+          <div id="metric-fields" class="flex flex-col md:flex-row gap-200 mb-300 md:mb-400">
 
             <!-- 키 (cm) -->
-            <div class="flex flex-col gap-100">
+            <div class="flex flex-col gap-100 flex-1">
               <label for="height-cm" class="text-preset-7-regular text-grey-500">Height</label>
               <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
@@ -117,7 +118,7 @@
             </div>
 
             <!-- 몸무게 (kg) -->
-            <div class="flex flex-col gap-100">
+            <div class="flex flex-col gap-100 flex-1">
               <label for="weight-kg" class="text-preset-7-regular text-grey-500">Weight</label>
               <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
@@ -136,7 +137,7 @@
           <div id="imperial-fields" class="hidden mb-300">
 
             <!-- 키: ft + in -->
-            <p class="text-preset-7-bold text-grey-500 mb-100">Height</p>
+            <p class="text-preset-7-regular text-grey-500 mb-100">Height</p>
             <div class="grid grid-cols-2 gap-200 mb-200">
               <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
@@ -159,7 +160,7 @@
             </div>
 
             <!-- 몸무게: st + lbs -->
-            <p class="text-preset-7-bold text-grey-500 mb-100">Weight</p>
+            <p class="text-preset-7-regular text-grey-500 mb-100">Weight</p>
             <div class="grid grid-cols-2 gap-200">
               <div class="flex items-center border border-grey-500 rounded-xl
                           hover:border-blue-500
@@ -184,11 +185,12 @@
           </div>
 
           <!-- ── 결과 박스 (파란색) ── -->
-          <div class="bg-blue-500 rounded-2xl p-400 text-white" aria-live="polite" aria-atomic="true">
+          <div class="bg-blue-500 rounded-[16px] md:rounded-r-[100px] p-400 text-white" aria-live="polite"
+            aria-atomic="true">
 
             <!-- Welcome 화면: 기본 상태 (값 입력 전) -->
             <div id="welcome-state">
-              <h3 class="text-preset-4 mb-300">Welcome!</h3>
+              <h3 class="text-preset-4 mb-300 md:mb-200">Welcome!</h3>
               <p class="text-preset-7-regular">
                 Enter your height and weight and you'll see your BMI result here.
               </p>
@@ -196,14 +198,23 @@
 
             <!-- 결과 화면: 값 입력 후 표시 (초기 숨김) -->
             <div id="result-state" class="hidden">
-              <p class="text-preset-6-semibold mb-100">Your BMI is...</p>
-              <p id="bmi-score" class="text-preset-2 mb-300">--</p>
-              <p id="bmi-description" class="text-preset-7-regular">
-                Your BMI suggests you're
-                <span id="bmi-classification" class="text-preset-7-regular"></span>.
-                Your ideal weight is between
-                <span id="bmi-range" class="text-preset-7-bold"></span>.
-              </p>
+              <!-- ↓ 레이아웃 전용 래퍼: JS hidden 토글과 분리 -->
+              <div class="md:flex md:items-center md:gap-600">
+                <!-- 왼쪽 덩어리: 라벨 + BMI 점수 -->
+                <div class="md:flex-1">
+                  <p class="text-preset-6-semibold mb-100">Your BMI is...</p>
+                  <p id="bmi-score" class="text-preset-2 mb-300 md:mb-0">--</p>
+                </div>
+                <!-- 오른쪽 덩어리: 설명 텍스트 -->
+                <div class="md:flex-1">
+                  <p id="bmi-description" class="text-preset-7-regular">
+                    Your BMI suggests you're
+                    <span id="bmi-classification" class="text-preset-7-regular"></span>.
+                    Your ideal weight is between
+                    <span id="bmi-range" class="text-preset-7-bold"></span>.
+                  </p>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -215,9 +226,11 @@
   <!-- ============================================================
        BMI 결과 의미 섹션
   ============================================================ -->
-  <section aria-labelledby="bmi-meaning-title" class="mb-[61px]">
-    <img src="./assets/images/image-man-eating.webp" alt="건강하게 과일을 먹고 있는 남성" class="w-full object-cover mb-600">
-    <div class="px-300">
+  <section aria-labelledby="bmi-meaning-title"
+    class="mb-[61px] md:mb-1200 md:flex md:items-center md:justify-end md:gap-900 md:pr-[41px]">
+    <img src="./assets/images/image-man-eating.webp" alt="건강하게 과일을 먹고 있는 남성"
+      class="w-full h-auto object-contain mb-600 md:mb-0 md:w-[395px] md:max-w-none md:flex-none">
+    <div class="px-300 md:px-0 md:w-[331px] md:flex-none">
       <h2 id="bmi-meaning-title" class="text-preset-3 text-blue-900 mb-400">
         What your BMI result means
       </h2>
@@ -235,11 +248,12 @@
   <!-- ============================================================
        건강 생활 팁 카드 3개 (그라디언트 배경)
   ============================================================ -->
-  <section aria-label="건강한 생활 습관 안내" class="relative px-300 py-600 flex flex-col gap-900 mb-[82px]">
+  <section aria-label="건강한 생활 습관 안내"
+    class="relative px-300 md:px-[39px] py-600 md:py-[50px] flex flex-col gap-900 mb-[82px] md:mb-1200">
     <div class="absolute inset-0 bg-gradient-1 opacity-25 -z-10" aria-hidden="true"></div>
 
     <!-- 건강한 식사 -->
-    <article class="flex flex-col gap-400">
+    <article class="flex flex-col md:flex-row md:items-center gap-400 md:gap-500">
       <img src="./assets/images/icon-eating.svg" alt="" aria-hidden="true" class="w-16 h-16">
       <div>
         <h3 class="text-preset-4 text-blue-900 mb-300">Healthy eating</h3>
@@ -251,7 +265,7 @@
     </article>
 
     <!-- 규칙적인 운동 -->
-    <article class="flex flex-col gap-400">
+    <article class="flex flex-col md:flex-row md:items-center gap-400 md:gap-500">
       <img src="./assets/images/icon-exercise.svg" alt="" aria-hidden="true" class="w-16 h-16">
       <div>
         <h3 class="text-preset-4 text-blue-900 mb-300">Regular exercise</h3>
@@ -263,7 +277,7 @@
     </article>
 
     <!-- 충분한 수면 -->
-    <article class="flex flex-col gap-400">
+    <article class="flex flex-col md:flex-row md:items-center gap-400 md:gap-500">
       <img src="./assets/images/icon-sleep.svg" alt="" aria-hidden="true" class="w-16 h-16">
       <div>
         <h3 class="text-preset-4 text-blue-900 mb-300">Adequate sleep</h3>
@@ -279,7 +293,7 @@
   <!-- ============================================================
        BMI 한계 섹션
   ============================================================ -->
-  <section aria-labelledby="limitations-title" class="px-300 pb-1200">
+  <section aria-labelledby="limitations-title" class="px-300 md:px-[41px] pb-1200">
 
     <h2 id="limitations-title" class="text-preset-3 text-blue-900 text-center mb-400">
       Limitations of BMI
@@ -290,10 +304,10 @@
       certain cases, the measurement may not be beneficial to use.
     </p>
 
-    <div class="flex flex-col gap-200">
+    <div class="flex flex-col md:grid md:grid-cols-2 gap-200 md:gap-x-200 md:gap-y-300">
 
       <!-- 성별 -->
-      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300">
+      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400">
         <div class="flex items-center gap-200 mb-200">
           <img src="./assets/images/icon-gender.svg" alt="" aria-hidden="true" class="w-8 h-8">
           <h3 class="text-preset-5 text-blue-900">Gender</h3>
@@ -305,7 +319,7 @@
       </article>
 
       <!-- 나이 -->
-      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300">
+      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400">
         <div class="flex items-center gap-200 mb-200">
           <img src="./assets/images/icon-age.svg" alt="" aria-hidden="true" class="w-8 h-8">
           <h3 class="text-preset-5 text-blue-900">Age</h3>
@@ -317,7 +331,7 @@
       </article>
 
       <!-- 근육 -->
-      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300">
+      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400">
         <div class="flex items-center gap-200 mb-200">
           <img src="./assets/images/icon-muscle.svg" alt="" aria-hidden="true" class="w-8 h-8">
           <h3 class="text-preset-5 text-blue-900">Muscle</h3>
@@ -329,7 +343,7 @@
       </article>
 
       <!-- 임신 -->
-      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300">
+      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400">
         <div class="flex items-center gap-200 mb-200">
           <img src="./assets/images/icon-pregnancy.svg" alt="" aria-hidden="true" class="w-8 h-8">
           <h3 class="text-preset-5 text-blue-900">Pregnancy</h3>
@@ -342,7 +356,8 @@
       </article>
 
       <!-- 인종 -->
-      <article class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300">
+      <article
+        class="bg-white rounded-2xl shadow-[16px_32px_56px_0_rgba(143,174,207,0.25)] p-300 md:p-400 md:col-span-2 md:w-[calc(50%-12px)] md:mx-auto">
         <div class="flex items-center gap-200 mb-200">
           <img src="./assets/images/icon-race.svg" alt="" aria-hidden="true" class="w-8 h-8">
           <h3 class="text-preset-5 text-blue-900">Race</h3>
